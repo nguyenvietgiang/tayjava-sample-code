@@ -1,6 +1,10 @@
 package vn.tayjava.controller;
 
+import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import vn.tayjava.dto.response.PagedResponse;
+import vn.tayjava.dto.response.ResponseSuccess;
 import vn.tayjava.model.User;
 import vn.tayjava.service.UserService;
 
@@ -15,8 +19,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseSuccess getAllUsers(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                       @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize) {
+        PagedResponse<User> pagedResponse = userService.getUsers(pageNo, pageSize);
+        ResponseSuccess response = new ResponseSuccess(HttpStatus.OK, "ok", pagedResponse);
+      //  return ResponseEntity.ok(response);
+        return response;
     }
 
     @PostMapping
@@ -24,13 +32,13 @@ public class CustomerController {
         return userService.createUser(user);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        return userService.updateUser(id, updatedUser);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-    }
+//    @PutMapping("/{id}")
+//    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+//        return userService.updateUser(id, updatedUser);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void deleteUser(@PathVariable Long id) {
+//        userService.deleteUser(id);
+//    }
 }

@@ -12,9 +12,11 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public PagedResponse<User> getUsers(int pageNo, int pageSize) {
@@ -34,7 +36,24 @@ public class UserService {
 
 
     public User createUser(User user) {
-        return userRepository.save(user);
+        // Lưu người dùng vào cơ sở dữ liệu
+        User savedUser = userRepository.save(user);
+
+        // Gửi email cảm ơn
+        try {
+            emailService.sendEmail(
+                    savedUser.getEmail(),                        // Email người nhận
+                    "Welcome to Our Platform",                  // Tiêu đề email
+                    "EmailNotification.html",                   // Tên template
+                    savedUser.getFirstName()                    // Tên người dùng để chèn vào email
+            );
+        } catch (Exception e) {
+            // Log lỗi nếu gửi email thất bại
+            System.err.println("Failed to send email: " + e.getMessage());
+            // Bạn có thể xử lý thêm nếu cần (vd: ghi vào log, gửi thông báo,...)
+        }
+
+        return savedUser;
     }
 
     public User updateUser(Long id, User updatedUser) {

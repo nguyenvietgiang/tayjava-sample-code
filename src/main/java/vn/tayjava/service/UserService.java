@@ -34,6 +34,11 @@ public class UserService {
         );
     }
 
+    // Thêm phương thức mới cho authentication
+    public User findByEmailAndPhone(String email, String phone) {
+        return userRepository.findByEmailAndPhone(email, phone)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email + " and phone: " + phone));
+    }
 
     public User createUser(User user) {
         // Lưu người dùng vào cơ sở dữ liệu

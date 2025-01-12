@@ -2,6 +2,7 @@ package vn.tayjava.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,7 +25,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Cho phép Swagger UI và các tài nguyên liên quan mà không cần xác thực
                         .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**", "/swagger-ui/**","/api-docs/swagger-config", "/api-docs/**").permitAll()
-                        // Cho phép các API login, register mà không cần xác thực JWT
+                        // Cho phép các API login, register mà không cần xác thực JWT va cac get method
+                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         .anyRequest().authenticated()  // Các yêu cầu còn lại yêu cầu xác thực
                 )

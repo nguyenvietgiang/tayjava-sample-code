@@ -1,8 +1,12 @@
 package vn.tayjava.dto.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class PagedResponse<T> {
+@JsonDeserialize
+public class PagedResponse<T> implements Serializable {
     private List<T> listdata;
     private int pageNumber;
     private int pageSize;
@@ -18,6 +22,10 @@ public class PagedResponse<T> {
         this.totalSize = totalSize;
         this.hasNextPage = hasNextPage;
         this.hasPrevPage = hasPrevPage;
+    }
+
+    // Thêm constructor mặc định
+    public PagedResponse() {
     }
 
     // Getters and setters

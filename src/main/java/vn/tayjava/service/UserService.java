@@ -1,4 +1,6 @@
 package vn.tayjava.service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.tayjava.dto.response.PagedResponse;
 import vn.tayjava.model.User;
@@ -19,6 +21,7 @@ public class UserService {
         this.emailService = emailService;
     }
 
+    @Cacheable(value = "users", key = "#pageNo + '-' + #pageSize")
     public PagedResponse<User> getUsers(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<User> page = userRepository.findAll(pageable);
@@ -40,6 +43,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email + " and phone: " + phone));
     }
 
+    @CacheEvict(value = "users", allEntries = true) // Xóa cache khi có user mới được tạo
     public User createUser(User user) {
         // Lưu người dùng vào cơ sở dữ liệu
         User savedUser = userRepository.save(user);
@@ -61,6 +65,7 @@ public class UserService {
         return savedUser;
     }
 
+    @CacheEvict(value = "users", allEntries = true) // Xóa cache khi có user mới được tạo
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id)
                 .map(user -> {
@@ -73,6 +78,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @CacheEvict(value = "users", allEntries = true) // Xóa cache khi có user mới được tạo
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

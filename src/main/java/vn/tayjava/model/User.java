@@ -1,9 +1,14 @@
 package vn.tayjava.model;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
+// thêm implements Serializable để dùng với redis cache
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;  // Thêm serialVersionUID
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

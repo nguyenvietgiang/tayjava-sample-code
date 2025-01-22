@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "vn.tayjava.proto.policy";
+option java_outer_classname = "PolicyProto";
+
+import "google/protobuf/empty.proto";
+
+package policy;
+
+service PolicyServiceGRPC {
+    rpc GetAllPolicies (google.protobuf.Empty) returns (stream GetPoliciesReply);
+    rpc GetSinglePolicy (PoliciesRequest) returns (GetPoliciesReply);
+}
+
+message PoliciesRequest {
+    int32 id = 1;
+}
+
+message GetPoliciesReply {
+    int32 id = 1;
+    string name = 2;
+}

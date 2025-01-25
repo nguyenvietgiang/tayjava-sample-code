@@ -1,4 +1,6 @@
 package vn.tayjava.service;
+
+import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,7 @@ public class UserService {
     }
 
     @CacheEvict(value = "users", allEntries = true) // Xóa cache khi có user mới được tạo
+    @Transactional // Quản lý transaction
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id)
                 .map(user -> {

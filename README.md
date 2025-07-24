@@ -18,3 +18,7 @@
 - Java 17
 - Spring Boot 3.2.3
 - Maven 3.5+
+- Grpc
+- Oracle Database 21c
+- Redis
+- Swagger UI
